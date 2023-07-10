@@ -10,6 +10,8 @@ public class Player : MonoBehaviour
     bool wDown;
     bool jDown;
 
+    bool isJump;
+
     Vector3 moveVec;
     Rigidbody rigid;// 물리 효과를 위해 Rigidbody 변수 선언 후 초기화
     Animator anim;
@@ -55,8 +57,20 @@ public class Player : MonoBehaviour
 
     void Jump()
     {
-        if (jDown){
+        if (jDown && !isJump){ // !isJump 가 False 일때
             rigid.AddForce(Vector3.up * 15,ForceMode.Impulse);
+            anim.SetBool("isJump", true);
+            anim.SetTrigger("doJump");
+            isJump =true;
+
         }
+    }
+    void OnCollisionEnter(Collision collision) {
+
+        if(collision.gameObject.tag =="Floor"){
+            anim.SetBool("isJump", false);
+            isJump =false;
+        }
+        
     }
 }
